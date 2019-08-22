@@ -35,7 +35,7 @@ import java.util.List;
 
 @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
 public class TemperatureScannerActivity extends AppCompatActivity {
-    final static String BLE_DEBUG_TAG = "TemperatureScanner Debug";
+    final static String BLE_DEBUG_TAG = "TemperatureScannerDebug";
     final int REQUEST_ENABLE_BT = 1001;
     private static final int PERMISSION_REQUEST_COARSE_LOCATION = 2001;
     private static final int SCAN_PERIOD = 10000; //10sec
