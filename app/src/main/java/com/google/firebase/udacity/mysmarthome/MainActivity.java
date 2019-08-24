@@ -309,10 +309,14 @@ public class MainActivity extends AppCompatActivity {
         switch (item.getItemId()){
             case R.id.sign_out_menu:
                 AuthUI.getInstance().signOut(this);
+                Intent loginIntent = new Intent(this,LoginActivity.class);
+                startActivity(loginIntent);
+          //reader menu descoped
+          /*
             case R.id.reader:
                 Intent scannerIntent = new Intent(this,TemperatureScannerActivity.class);
                 startActivityForResult(scannerIntent,RC_TEMP_READING);
-
+          */
         }
         return super.onOptionsItemSelected(item);
     }
