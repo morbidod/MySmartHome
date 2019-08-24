@@ -3,4 +3,5 @@
     <string name="sign_out">Sign Out</string>
     <string name="send_button_label">Send</string>
     <string name="reader">reader</string>
-</resources>
+    <string name="description">SmartHome let you read the temperature of your home in different points. Need to authenticate first</string>
+    </resources>

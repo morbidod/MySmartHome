@@ -200,10 +200,12 @@ public class MainActivity extends AppCompatActivity {
                     //Need to Sign in
                     onSignOutCleanUp();
                     Toast.makeText(getApplicationContext(),"Need to Sign in",Toast.LENGTH_SHORT).show();
-                    Intent intentSignIn= AuthUI.getInstance().createSignInIntentBuilder().
+                   /*Intent intentSignIn= AuthUI.getInstance().createSignInIntentBuilder().
                             setProviders(AuthUI.EMAIL_PROVIDER,AuthUI.GOOGLE_PROVIDER).build();
                     startActivityForResult(intentSignIn,RC_SIGN_IN);
-
+                   */
+                   Intent loginIntent=new Intent(getApplicationContext(),LoginActivity.class);
+                   startActivity(loginIntent);
                 }
                 if (user !=null){
                     // user is authenticated - need to iniitialize
