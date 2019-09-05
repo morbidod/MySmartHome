@@ -54,7 +54,10 @@ public class LoginActivity extends AppCompatActivity {
         exit_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                finish();
+                Log.d(LOG_TAG,"OnExit click");
+                moveTaskToBack(true);
+                android.os.Process.killProcess(android.os.Process.myPid());
+                System.exit(1);
             }
         });
 
@@ -92,6 +95,10 @@ public class LoginActivity extends AppCompatActivity {
                 else {
                     Log.d(LOG_TAG,"User Not Part of Home");
                     //TODO: Handle it
+                    Intent i=new Intent(getApplicationContext(),RequestActivity.class);
+                    i.putExtra("uid",loggedUser.getUid());
+                    i.putExtra("name",loggedUser.getDisplayName());
+                    startActivity(i);
                 }
             }
 

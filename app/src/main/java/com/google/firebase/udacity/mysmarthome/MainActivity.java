@@ -16,9 +16,11 @@
 package com.google.firebase.udacity.mysmarthome;
 
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.InputFilter;
@@ -126,9 +128,7 @@ public class MainActivity extends AppCompatActivity {
         // Initialize references to views
         mProgressBar = (ProgressBar) findViewById(R.id.progressBar);
         mMessageListView = (ListView) findViewById(R.id.messageListView);
-        mPhotoPickerButton = (ImageButton) findViewById(R.id.photoPickerButton);
-        mMessageEditText = (EditText) findViewById(R.id.messageEditText);
-        mSendButton = (Button) findViewById(R.id.sendButton);
+
 
         // Initialize message ListView and its adapter
        // List<FriendlyMessage> friendlyMessages = new ArrayList<>();
@@ -143,53 +143,10 @@ public class MainActivity extends AppCompatActivity {
         // Initialize progress bar
         mProgressBar.setVisibility(ProgressBar.INVISIBLE);
 
-        // ImagePickerButton shows an image picker to upload a image for a message
-        mPhotoPickerButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                // TODO: Fire an intent to show an image picker
-            }
-        });
-
-        // Enable Send button when there's text to send
-        mMessageEditText.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                if (charSequence.toString().trim().length() > 0) {
-                    mSendButton.setEnabled(true);
-                } else {
-                    mSendButton.setEnabled(false);
-                }
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-            }
-        });
-        mMessageEditText.setFilters(new InputFilter[]{new InputFilter.LengthFilter(DEFAULT_MSG_LENGTH_LIMIT)});
-
-        // Send button sends a message and clears the EditText
-        mSendButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                // TODO: Send messages on click
-                FriendlyMessage fm = new FriendlyMessage(mMessageEditText.getText().toString(),mUsername,null);
-                mMessageDBReference.push().setValue(fm);
-                //BTDevice mBTDevice = new BTDevice(4,"Device4","AA:HH:LL",mMessageEditText.getText().toString());
-                //mDatabaseReference.push().setValue(mBTDevice);
-                //mUserDBReference.push().setValue(mUser);
 
 
-                // Clear input box
-                mMessageEditText.setText("");
-            }
-        });
-
-
+        //Firebase AuthStateListener initialization
+        // get User
 
         mAuthStateListener = new FirebaseAuth.AuthStateListener() {
             @Override
@@ -308,9 +265,7 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
             case R.id.sign_out_menu:
-                AuthUI.getInstance().signOut(this);
-                Intent loginIntent = new Intent(this,LoginActivity.class);
-                startActivity(loginIntent);
+                onSignOutCleanUp();
           //reader menu descoped
           /*
             case R.id.reader:
@@ -341,6 +296,13 @@ public class MainActivity extends AppCompatActivity {
         listTemperatures.clear();
     }
 
+    @Override
+    public void onBackPressed() {
+        //super.onBackPressed();
+        Log.d(LOG_TAG,"OnBackPressed");
+        handleBack();
+    }
+
     private void onSignInInitialize(String username){
         mUsername=username;
         attachDatabaseListener();
@@ -358,6 +320,9 @@ public class MainActivity extends AppCompatActivity {
         mDeviceAdapter.clear();
         mTempAdapter.clear();
         listTemperatures.clear();
+        AuthUI.getInstance().signOut(this);
+        Intent loginIntent = new Intent(this,LoginActivity.class);
+        startActivity(loginIntent);
 
 
     }
@@ -412,7 +377,9 @@ public class MainActivity extends AppCompatActivity {
             mTempChildEventListener = new ChildEventListener() {
                 @Override
                 public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                    Log.d(LOG_TAG,"tempdb dataSnapshot:"+dataSnapshot.toString());
                     TemperatureReading mTR = dataSnapshot.getValue(TemperatureReading.class);
+                    mTR.print();
                     //add to the list of temperatures
                     // check if the timestamp
                     mTempAdapter.add(mTR);
@@ -452,6 +419,31 @@ public class MainActivity extends AppCompatActivity {
             mTempDBReference.removeEventListener(mTempChildEventListener);
             mTempChildEventListener=null;
         }
+   }
+
+   private void handleBack(){
+       // 1. Instantiate an <code><a href="/reference/android/app/AlertDialog.Builder.html">AlertDialog.Builder</a></code> with its constructor
+       Log.d(LOG_TAG,"handleBack");
+      AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this, R.style.Theme_AppCompat_Dialog);
+// 2. Chain together various setter methods to set the dialog characteristics
+       builder.setMessage(R.string.dialog_message)
+               .setTitle(R.string.dialog_title)
+               .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+           public void onClick(DialogInterface dialog, int id) {
+               // User clicked OK button
+               onSignOutCleanUp();
+           }
+       });
+       builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+           public void onClick(DialogInterface dialog, int id) {
+               // User cancelled the dialog
+               dialog.dismiss();
+           }
+       });
+
+
+       AlertDialog dialog = builder.create();
+       dialog.show();
    }
 
     private void Logging (User user){

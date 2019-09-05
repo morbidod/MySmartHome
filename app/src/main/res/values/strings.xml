@@ -3,5 +3,12 @@
     <string name="sign_out">Sign Out</string>
     <string name="send_button_label">Send</string>
     <string name="reader">reader</string>
+    <string name="request">You need to be signed in as a home users. Please send the message of your request below</string>
     <string name="description">SmartHome let you read the temperature of your home in different points. Need to authenticate first</string>
-    </resources>
+    <string name="dialog_title">Signing out</string>
+    <string name="dialog_db_updated">Your request has been sent to the administrator. Please Sign-In back once you have receveid the authorization.</string>
+    <string name="dialog_message">Going back you will be signed out. Please confirm</string>
+    <string name="ok">OK</string>
+    <string name="cancel">CANCEL</string>
+
+</resources>

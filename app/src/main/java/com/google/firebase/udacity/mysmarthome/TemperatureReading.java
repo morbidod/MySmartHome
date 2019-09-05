@@ -1,5 +1,7 @@
 package com.google.firebase.udacity.mysmarthome;
 
+import android.util.Log;
+
 /**
  * Created by XP011224 on 23/10/2017.
  */
@@ -37,5 +39,8 @@ public class TemperatureReading {
 
     public Long getTimestamp() {
         return timestamp;
+    }
+    public void print(){
+        Log.d("TemperatureReadingDEBUG","temperature:"+getTemperature()+" room:"+getRoom()+" timestamp:"+getTimestamp());
     }
 }
